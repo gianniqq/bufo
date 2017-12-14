@@ -35,6 +35,6 @@ output/
         └── pio.txt
 ```
         
-it takes two parameters, one is the "input" folder, the second one is the "output" folder, it actually copy everything, 
-so you can compare that everything was processed and then delete the original structure, everytime the script find an 
-underscore character in a folder name it create a folder with that name as subfolder
+it takes two parameters, one is the "input" folder, the second one is the "output" folder, it actually copies everything, 
+so you can compare that everything was processed and then delete the original structure, everytime the script finds an 
+underscore character in a folder name it will create a folder with that name as subfolder.
