@@ -1,35 +1,37 @@
 #!/bin/bash
 
-function azione()
+function handle_folder()
 {
-	local VECCHIO=${1%/}
-    local NUOVO=${2%/}
-    local DIRS="$VECCHIO/*"
+    local INPUT=${1%/}
+    local OUTPUT=${2%/}
     
+    echo "input $INPUT"
+    echo "output $OUTPUT"
+    echo "dirs $DIRS"
+    
+    local DIRS="$INPUT/"
     local d
-    for d in $DIRS
+    for d in "$DIRS"*
     do
         if [ -d "$d" ]; then
-            local nome=$(basename "$d")
-            local percorso="$NUOVO/"
-            echo "nome completo: $d"
-            echo "nome cartella: $nome"
-            echo "nome percorso: $percorso"
+            local name=$(basename "$d")
+            local path="$OUTPUT/"
+            #echo "complete name: $d"
+            #echo "directory name: $name"
+            #echo "path name: $path"
             
             local OLDIFS="$IFS"
             IFS="_"
             local i
-            for i in $nome
+            for i in $name
             do
-                mkdir -p "$percorso$i"
+                mkdir -p "$path$i"
                 
-                echo "$d -> $percorso$i"
+                echo "$d -> $path$i"
                 
-                percorso="$percorso$i/"
+                path="$path$i/"
             done
             IFS="$OLDIFS"
-            
-            echo "fine for"
             
             local OLDIFS="$IFS"
             IFS=$'\n'
@@ -38,21 +40,16 @@ function azione()
             local f
             for f in $(ls -p "$FILES" | grep -v / )
             do
-                #echo "Rilevato il file/directory seguente: $f"
-                #if [ -f "$f" ]; then
-                    echo "$FILES$f -> $percorso$(basename $f)"
+                echo "$FILES$f -> $path$(basename $f)"
 
-                    cp "$FILES$f" "$percorso"
-                #else
-                #    echo "Non sono un file: $f"
-                #fi
+                cp "$FILES$f" "$path"
             done
             IFS="$OLDIFS"
             set +f
             
-            azione "$VECCHIO/$nome" "$percorso"
+            handle_folder "$INPUT/$name" "$path"
         fi
     done
 }
 
-azione $1 $2
+handle_folder "$1" "$2"
